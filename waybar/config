@@ -121,7 +121,7 @@
     },
     "custom/file": {
 	"format": "",
-	"on-click": "pcmanfm",
+	"on-click": "kitty -e ranger",
     },
 		
     "custom/terminal": {
