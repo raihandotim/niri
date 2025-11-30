@@ -43,7 +43,7 @@ passwd username
 chfn -f "Full name" username
 vim /etc/sudoers
 su "username"
-pacman -Sy niri wmctrl niri waybar qt5-wayland qt6-wayland chromium pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel ttf-nerd-fonts-symbols firefox gimp fcitx5 fcitx5-m17n m17n-db fcitx5-configtool fcitx-config-qt fcitx5-qt fcitx5-gtk bluez blueman okular nomacs(aur) ranger pcmanfm git moc ttf-font-awesome brightnessctl grim localsend-bin acpi kitty
+pacman -Sy niri xwayland-satellite wmctrl niri waybar qt5-wayland qt6-wayland chromium pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel ttf-nerd-fonts-symbols firefox gimp fcitx5 fcitx5-m17n m17n-db fcitx5-configtool fcitx-config-qt fcitx5-qt fcitx5-gtk bluez blueman okular nomacs(aur) ranger pcmanfm git moc ttf-font-awesome brightnessctl grim localsend-bin acpi kitty
 timedatectl set-ntp true
 timedatectl set-timezone Asia/Dhaka
 #run "Hyprland" in tty to start hyprland session
