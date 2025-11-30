@@ -1,0 +1,154 @@
+{
+     "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 25, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-center": ["niri/workspaces"],
+    "modules-left": ["custom/menu","custom/firefox","custom/file","custom/terminal","niri/window"],
+    "modules-right": ["pulseaudio", "network", "temperature", "battery", "clock", "tray"],
+    "tray": {
+        //"icon-size": 15,
+        "spacing": 5
+    },
+    "clock": {
+        "timezone": "Asia/Dhaka",
+	"interval": 1,
+	"format": "{:%I:%M:%S %p }",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%A, %d %B, %Y}",
+	"Max-length": 20
+    },
+    "cpu": {
+	"min-length": 6,
+        "format": "{usage}% ",
+	"interval": 1,
+        "tooltip": false
+    },
+    "memory": {
+	"min-length": 6,
+        "format": "{}% ",
+	"interval": 1,
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+	"interval": 1,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+	"interval": 1,
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+	"interval": 1,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "network": {
+	"min-length": 12,
+	"interval": 1,
+	"on-click": "kitty -e nmtui",
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{bandwidthTotalBytes}  ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{essid} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "",
+        //"tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {	
+	"min-length": 15,
+        "format": "{usage}% ",
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "custom/stacer": {
+    	"format": "",
+	"on-click": "stacer",
+
+    },
+
+    "custom/menu": {
+    	"format": "",
+	"on-click": "fuzzel dmenu",
+
+    },
+
+    "custom/leafpad": {
+	"format": "",
+	"on-click": "leafpad"
+    },
+
+    "custom/firefox": {
+	"format": "",
+	"on-click": "firefox"
+    },
+    "custom/file": {
+	"format": "",
+	"on-click": "pcmanfm",
+    },
+		
+    "custom/terminal": {
+	"format": "",
+	"on-click": "kitty"
+    },
+    "custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true,
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "niri/workspaces": {
+	"format": "{icon}",
+	"format-icons": {
+		"default": "",
+		"active": "",
+		"urgent": "",
+	}
+    },
+    "niri/window": {
+	"max-length": 25,
+   }
+}
