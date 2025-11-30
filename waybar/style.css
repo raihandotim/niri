@@ -5,7 +5,7 @@
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
+    background-color: rgba(31, 31, 31, 0.7);
     /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
     color: #fffffD;
     transition-property: background-color;
@@ -95,7 +95,7 @@ button:hover {
 #mpd {
     padding: 0 4px;
     color: #ffffff;
-    background: #454545;
+    background: #151515;
     border-radius: 8px;
 }
 
