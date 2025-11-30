@@ -1,0 +1,51 @@
+iwctl #Wifi setting
+    device list #List wifi devices
+    station wlan0123 scan #Scans all wifi networks
+    station wlan0123 get-networks #Lists all networks
+    station wlan0123 connect "Network Name" #Connect to wifi
+lsblk
+fdisk
+    to install UEFI, make a partition in fat-32 format, type, efi system, which is 500M in size
+    mkfs.fat -F32 /dev/sda1
+
+#mount /dev/sda1 /mnt
+    if UEFI is used, then efi system partition should be mounted to /mnt/boot
+    mount /dev/sda2 /mnt
+    mkdir /mnt/boot
+    mount /dev/sda1 /mnt/boot
+
+
+
+vim /etc/pacman.d/mirrorlist
+    #Server = http://mirror.xeonbd.com/archlinux/$repo/os/$arch
+
+pacstrap /mnt base base-devel linux linux-firmware linux-headers efibootmgr vim grub networkmanager
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+vim /etc/locale.gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+locale-gen
+echo "Hostname" > /etc/hostname
+passwd
+systemctl enable NetworkManager
+#grub-install /dev/sda #grub-install --force /dev/sda
+
+#if UEFI is used,
+grub-install --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+exit
+umount -R /mnt
+reboot
+nmtui #Setting Network
+useradd -m "username"
+usermod -G wheel "username"
+passwd username
+chfn -f "Full name" username
+vim /etc/sudoers
+su "username"
+pacman -Sy wmctrl niri waybar qt5-wayland qt6-wayland chromium pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel ttf-nerds-symbols-common firefox gimp fcitx5 fcitx5-m17n m17n-db fcitx5-configtool fcitx-config-qt fcitx5-qt fcitx5-gtk bluez blueman okular nomacs(aur) ranger pcmanfm git moc ttf-font-awesome brightnessctl grim localsend-bin acpi kitty
+timedatectl set-ntp true
+timedatectl set-timezone Asia/Dhaka
+#run "Hyprland" in tty to start hyprland session
+
+
