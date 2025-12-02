@@ -6,3 +6,6 @@ xdg-desktop-portal-gnome
 xdg-dekstop-portal-gtk
 polkit-kde-agent
 ttf-nerd-fonts-symbols-common
+
+
+#xwayland-satellite
