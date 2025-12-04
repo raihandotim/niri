@@ -40,6 +40,7 @@ binds {
     MOD+SHIFT+H                     { show-hotkey-overlay; }
 
     // ─── Applications ───
+    MOD+CTRL+Escape              { spawn-sh "systemctl poweroff"; }
     Print                        { spawn-sh "mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%s%N).png"; }
     MOD+T                          hotkey-overlay-title="Open Terminal: kitty" { spawn-sh "kitty"; }
     MOD+Slash                           hotkey-overlay-title="Open App Launcher: fuzzel" { spawn-sh "fuzzel"; }
