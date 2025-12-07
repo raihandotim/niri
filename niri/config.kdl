@@ -9,7 +9,7 @@ input {
         xkb {
             layout "us" // Use the German keyboard layout
         }
-        numlock // Enable numlock on startup
+        //numlock // Enable numlock on startup
     }
 
     touchpad {
