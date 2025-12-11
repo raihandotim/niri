@@ -32,7 +32,7 @@ mkdir -p /mnt/boot
 mount $EFIPART /mnt/boot
 
 ### --- FAST BANGLADESH MIRROR ---
-echo "Server = https://mirror.xeonbd.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+echo "Server = http://mirror.xeonbd.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 ### --- BASE INSTALL ---
 pacstrap /mnt base base-devel linux linux-firmware linux-headers \
@@ -68,9 +68,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 ### ENABLE NETWORK MANAGER
 systemctl enable NetworkManager
 
-###Enable bluetooth
-systemctl enable bluetooth
-
 ### INSTALL ALL PACKAGES
 pacman -Sy --noconfirm \
   niri fish wmctrl waybar qt5-wayland qt6-wayland chromium \
@@ -79,11 +76,25 @@ pacman -Sy --noconfirm \
   xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel \
   mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp \
   bluez blueman nwg-look ranger pcmanfm git noto-fonts \
-  brightnessctl grim acpi kitty
+  brightnessctl grim acpi kitty openbangla-keyboard
 
 ### TIME
 timedatectl set-ntp true
 timedatectl set-timezone Asia/Dhaka
+
+### --- OPENBANGLA KEYBOARD (WAYLAND ONLY) ---
+mkdir -p /etc/environment.d
+cat << 'WAYLANDENV' > /etc/environment.d/90-openbangla.conf
+GTK_IM_MODULE=openbangla
+QT_IM_MODULE=openbangla
+XMODIFIERS=@im=openbangla
+
+# Keyboard layouts (US + Bangla)
+XKB_DEFAULT_LAYOUT=us,bd
+
+# Ctrl + Space to switch layout
+XKB_DEFAULT_OPTIONS=grp:ctrl_space_toggle
+WAYLANDENV
 
 ### INSTALL yay
 cd /home/$USERNAME
