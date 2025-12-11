@@ -70,7 +70,7 @@ EOF
 mkdir -p /mnt/home/$USERNAME/.config
 git clone https://github.com/raihandotim/niri /tmp/niri_repo
 cp -r /tmp/niri_repo/* /mnt/home/$USERNAME/.config/
-chown -R $USERNAME:$USERNAME /mnt/home/$USERNAME/.config
+#chown -R $USERNAME:$USERNAME /mnt/home/$USERNAME/.config
 rm -rf /tmp/niri_repo
 
 echo "✅ Installation complete. Fish and Niri installed. GitHub Niri config copied to /home/$USERNAME/.config."
