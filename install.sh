@@ -81,15 +81,16 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # --- ENABLE NETWORK MANAGER ---
 systemctl enable NetworkManager
 
-EOF
+
 
 ### --- COPY NIRI CONFIG TO USER HOME (after chroot) ---
 su $USERNAME
-mkdir -p /mnt/home/$USERNAME/.config
+mkdir -p /home/$USERNAME/.config
 git clone https://github.com/raihandotim/niri /tmp/niri_repo
-cp -r /tmp/niri_repo/* /mnt/home/$USERNAME/.config/
-chown -R $USERNAME:$USERNAME /mnt/home/$USERNAME/
+cp -r /tmp/niri_repo/* /home/$USERNAME/
+chown -R $USERNAME:$USERNAME /home/$USERNAME/
 rm -rf /tmp/niri_repo
+EOF
 umount -R /mnt
 
 echo "✅ Installation complete. Fish and Niri installed. GitHub Niri config copied to /home/$USERNAME/.config."
