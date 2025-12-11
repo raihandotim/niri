@@ -1,6 +1,25 @@
 #!/bin/bash
 set -e
+echo "__        __   _                          
+\ \      / /__| | ___ ___  _ __ ___   ___ 
+ \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \
+  \ V  V /  __/ | (_| (_) | | | | | |  __/
+   \_/\_/ \___|_|\___\___/|_| |_| |_|\___|
+                                          \"
+echo " _        
+| |_ ___  
+| __/ _ \ 
+| || (_) |
+ \__\___/ 
+          \"
+echo "     _ _                   _           
+ _ __ __ _(_) |__   __ _ _ __   (_)_ __ ___  
+| '__/ _` | | '_ \ / _` | '_ \  | | '_ ` _ \ 
+| | | (_| | | | | | (_| | | | |_| | | | | | |
+|_|  \__,_|_|_| |_|\__,_|_| |_(_)_|_| |_| |_|
+                                             \"
 
+echo "use fdisk /disk/name for partitioning..."
 echo "Available disks:"
 lsblk
 echo
@@ -34,7 +53,7 @@ mount $EFIPART /mnt/boot
 echo "Server = https://mirror.xeonbd.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 ### --- BASE INSTALL (pacstrap all packages including fish & niri) ---
-pacstrap /mnt base base-devel linux linux-firmware linux-headers efibootmgr vim grub networkmanager git sudo fish niri swaybg waybar chromium mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp ranger pcmanfm git noto-fonts brightnessctl grim acpi kitty pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent nwg-look fuzzel qt5-wayland qt6-wayland
+pacstrap /mnt base base-devel linux linux-firmware linux-headers efibootmgr vim grub networkmanager git sudo fish niri swaybg waybar evince htop fastfetch rsync p7zip unrar zip unzip tar okular wget curl chromium mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp ranger nautilus git noto-fonts brightnessctl grim acpi kitty pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent nwg-look fuzzel qt5-wayland qt6-wayland figlet
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
