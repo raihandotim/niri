@@ -67,22 +67,11 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 ### ENABLE NETWORK MANAGER
 systemctl enable NetworkManager
-
-### INSTALL ALL PACKAGES
-pacman -Sy --noconfirm \
-  niri fish wmctrl waybar qt5-wayland qt6-wayland chromium \
-  pipewire pipewire-pulse pipewire-alsa pipewire-jack \
-  wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome \
-  xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel \
-  mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp \
-  bluez blueman nwg-look ranger pcmanfm git noto-fonts \
-  brightnessctl grim acpi kitty openbangla-keyboard
-
-### TIME
-timedatectl set-ntp true
-timedatectl set-timezone Asia/Dhaka
+systemctl enable bluetooth
 
 ### --- OPENBANGLA KEYBOARD (WAYLAND ONLY) ---
+pacman -Sy --noconfirm openbangla-keyboard
+
 mkdir -p /etc/environment.d
 cat << 'WAYLANDENV' > /etc/environment.d/90-openbangla.conf
 GTK_IM_MODULE=openbangla
@@ -96,11 +85,71 @@ XKB_DEFAULT_LAYOUT=us,bd
 XKB_DEFAULT_OPTIONS=grp:ctrl_space_toggle
 WAYLANDENV
 
-### INSTALL yay
+### --- INSTALL PACKAGES INTERACTIVELY ---
+echo "Pacman will now install the following packages interactively:"
+echo "niri fish wmctrl waybar swaybg qt5-wayland qt6-wayland chromium"
+echo "pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber"
+echo "pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome"
+echo "xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel"
+echo "mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp"
+echo "bluez blueman nwg-look ranger pcmanfm git noto-fonts"
+echo "brightnessctl grim acpi kitty"
+echo
+echo "Pacman may ask for optional dependency selection."
+read -p "Press Enter to continue..."
+
+pacman -Sy niri fish wmctrl waybar swaybg qt5-wayland qt6-wayland chromium \
+  pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber \
+  pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome \
+  xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel \
+  mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp \
+  bluez blueman nwg-look ranger pcmanfm git noto-fonts \
+  brightnessctl grim acpi kitty
+
+### TIME
+timedatectl set-ntp true
+timedatectl set-timezone Asia/Dhaka
+
+### --- INSTALL yay (AUR helper) ---
 cd /home/$USERNAME
 sudo -u $USERNAME git clone https://aur.archlinux.org/yay.git
 cd yay
 sudo -u $USERNAME makepkg -si --noconfirm
+
+### --- SET FISH AS DEFAULT SHELL ---
+chsh -s /usr/bin/fish $USERNAME
+
+### --- AUTO-LOGIN ON TTY1 ---
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+cat << AUTOLOGIN > /etc/systemd/system/getty@tty1.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin $USERNAME --noclear %I \$TERM
+AUTOLOGIN
+
+systemctl daemon-reexec
+systemctl enable getty@tty1
+
+### --- AUTO-START NIRI ---
+mkdir -p /home/$USERNAME/.config/systemd/user
+cat << NIRISERVICE > /home/$USERNAME/.config/systemd/user/niri.service
+[Unit]
+Description=Start Niri Wayland Compositor
+
+[Service]
+ExecStart=/usr/bin/niri
+Restart=always
+Environment=WAYLAND_DISPLAY=wayland-0
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
+NIRISERVICE
+
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/systemd
+
+systemctl --user enable niri.service
 
 EOF
 
