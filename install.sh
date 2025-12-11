@@ -84,6 +84,7 @@ systemctl enable NetworkManager
 EOF
 
 ### --- COPY NIRI CONFIG TO USER HOME (after chroot) ---
+su $USERNAME
 mkdir -p /mnt/home/$USERNAME/.config
 git clone https://github.com/raihandotim/niri /tmp/niri_repo
 cp -r /tmp/niri_repo/* /mnt/home/$USERNAME/.config/
