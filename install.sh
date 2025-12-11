@@ -17,7 +17,6 @@ echo
 echo "Re-enter password:"
 read -s USERPASS2
 echo
-
 if [[ "$USERPASS" != "$USERPASS2" ]]; then
     echo "Passwords do not match!"
     exit 1
@@ -26,7 +25,6 @@ fi
 ### --- FORMAT DISKS ---
 mkfs.fat -F32 $EFIPART
 mkfs.ext4 $ROOTPART
-
 mount $ROOTPART /mnt
 mkdir -p /mnt/boot
 mount $EFIPART /mnt/boot
@@ -43,88 +41,73 @@ genfstab -U /mnt >> /mnt/etc/fstab
 ### --- CHROOT CONFIGURATION ---
 arch-chroot /mnt bash <<EOF
 
-### --- LOCALE ---
+# --- LOCALE & TIME ---
 sed -i 's/#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
-
-### --- HOSTNAME ---
 echo "archlinux" > /etc/hostname
+timedatectl set-ntp true
+timedatectl set-timezone Asia/Dhaka
 
-### --- ROOT PASSWORD ---
+# --- ROOT PASSWORD ---
 echo "root:$USERPASS" | chpasswd
 
-### --- ADD USER ---
+# --- ADD USER ---
 useradd -m -G wheel $USERNAME
 echo "$USERNAME:$USERPASS" | chpasswd
-
-### --- SUDO PERMISSION ---
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-### --- BOOTLOADER (UEFI) ---
+# --- BOOTLOADER (UEFI) ---
 grub-install --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
-### --- ENABLE SERVICES ---
+# --- ENABLE SERVICES ---
 systemctl enable NetworkManager
 systemctl enable bluetooth
 
-### --- INTERACTIVE PACMAN PACKAGE INSTALL ---
-echo "Pacman will now install the desktop packages interactively:"
-echo "niri fish wmctrl waybar swaybg qt5-wayland qt6-wayland chromium"
-echo "pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber"
-echo "pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome"
-echo "xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel"
-echo "mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp"
-echo "bluez blueman nwg-look ranger pcmanfm git noto-fonts"
-echo "brightnessctl grim acpi kitty openbangla-keyboard"
-echo
-read -p "Press Enter to continue..."
-
-pacman -Sy niri fish wmctrl waybar swaybg qt5-wayland qt6-wayland chromium \
+# --- PACMAN PACKAGE INSTALL ---
+pacman -Sy --noconfirm \
+  fish wmctrl waybar swaybg qt5-wayland qt6-wayland chromium \
   pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber \
   pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome \
   xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel \
   mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp \
-  bluez bluez-utils nwg-look ranger pcmanfm git noto-fonts \
-  brightnessctl grim acpi kitty openbangla-keyboard
+  bluez blueman ranger pcmanfm git noto-fonts brightnessctl grim \
+  acpi kitty openbangla-keyboard sway swayidle swaylock
 
-### --- TIME SETTINGS ---
-timedatectl set-ntp true
-timedatectl set-timezone Asia/Dhaka
-
-### --- INSTALL YAY ---
+# --- INSTALL YAY ---
 sudo -u $USERNAME git clone https://aur.archlinux.org/yay.git /home/$USERNAME/yay
 cd /home/$USERNAME/yay
 sudo -u $USERNAME makepkg -si --noconfirm
 
-### --- SET FISH AS DEFAULT SHELL ---
+# --- INSTALL AUR PACKAGES ---
+sudo -u $USERNAME yay -S --noconfirm niri nwg-look-git nomacs-aur
+
+# --- SET FISH AS DEFAULT SHELL ---
 chsh -s /usr/bin/fish $USERNAME
 
-### --- OPENBANGLA KEYBOARD FOR WAYLAND ---
+# --- OPENBANGLA KEYBOARD FOR WAYLAND ---
 mkdir -p /home/$USERNAME/.config/environment.d
-cat << 'OB' > /home/$USERNAME/.config/environment.d/90-openbangla.conf
+cat << OB > /home/$USERNAME/.config/environment.d/90-openbangla.conf
 GTK_IM_MODULE=openbangla
 QT_IM_MODULE=openbangla
 XMODIFIERS=@im=openbangla
 XKB_DEFAULT_LAYOUT=us,bd
 XKB_DEFAULT_OPTIONS=grp:ctrl_space_toggle
 OB
-
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
-### --- AUTO-LOGIN ON TTY1 ---
+# --- AUTO-LOGIN ON TTY1 ---
 mkdir -p /etc/systemd/system/getty@tty1.service.d
 cat << AL > /etc/systemd/system/getty@tty1.service.d/override.conf
 [Service]
 ExecStart=
 ExecStart=-/sbin/agetty --autologin $USERNAME --noclear %I \$TERM
 AL
-
 systemctl daemon-reexec
 systemctl enable getty@tty1
 
-### --- AUTO-START NIRI ---
+# --- AUTO-START NIRI & WAYBAR ---
 mkdir -p /home/$USERNAME/.config/systemd/user
 cat << NS > /home/$USERNAME/.config/systemd/user/niri.service
 [Unit]
@@ -141,11 +124,11 @@ StandardError=journal
 [Install]
 WantedBy=default.target
 NS
-
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/systemd
+
 EOF
 
-### --- COPY NIRI CONFIG FROM GITHUB ---
+# --- COPY NIRI CONFIG FROM GITHUB ---
 arch-chroot /mnt sudo -u "$USERNAME" bash <<EOF
 cd /home/$USERNAME
 git clone https://github.com/raihandotim/niri niri_repo
@@ -153,4 +136,4 @@ mkdir -p /home/$USERNAME/.config
 cp -r niri_repo/* /home/$USERNAME/.config/
 EOF
 
-echo "✅ Installation complete. Reboot now and enjoy Arch with Wayland, Niri, fish, and OpenBangla keyboard!"
+echo "✅ Installation complete. Reboot now to start Arch with Wayland, Niri, fish shell, and OpenBangla keyboard!"
