@@ -34,7 +34,7 @@ mount $EFIPART /mnt/boot
 echo "Server = https://mirror.xeonbd.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 ### --- BASE INSTALL (pacstrap all packages including fish & niri) ---
-pacstrap /mnt base base-devel linux linux-firmware linux-headers efibootmgr vim grub networkmanager git sudo fish niri swaybg waybar chromium mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp ranger pcmanfm git noto-fonts brightnessctl grim acpi kitty pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent fuzzel qt5-wayland qt6-wayland
+pacstrap /mnt base base-devel linux linux-firmware linux-headers efibootmgr vim grub networkmanager git sudo fish niri swaybg waybar chromium mpv vlc libreoffice-fresh ttf-nerd-fonts-symbols firefox gimp ranger pcmanfm git noto-fonts brightnessctl grim acpi kitty pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-utils polkit-kde-agent nwg-look fuzzel qt5-wayland qt6-wayland
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
