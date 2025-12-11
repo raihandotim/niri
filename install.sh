@@ -88,8 +88,9 @@ su $USERNAME
 mkdir -p /mnt/home/$USERNAME/.config
 git clone https://github.com/raihandotim/niri /tmp/niri_repo
 cp -r /tmp/niri_repo/* /mnt/home/$USERNAME/.config/
-#chown -R $USERNAME:$USERNAME /mnt/home/$USERNAME/.config
+chown -R $USERNAME:$USERNAME /mnt/home/$USERNAME/
 rm -rf /tmp/niri_repo
+umount -R /mnt
 
 echo "✅ Installation complete. Fish and Niri installed. GitHub Niri config copied to /home/$USERNAME/.config."
 echo "You may reboot now."
