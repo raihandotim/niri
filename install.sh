@@ -86,7 +86,7 @@ systemctl enable NetworkManager
 su $USERNAME
 mkdir -p /home/$USERNAME/.config
 git clone https://github.com/raihandotim/niri /tmp/niri_repo
-cp -r /tmp/niri_repo/* /home/$USERNAME/
+cp -r /tmp/niri_repo/* /home/$USERNAME/.config
 chown -R $USERNAME:$USERNAME /home/$USERNAME/
 rm -rf /tmp/niri_repo
 EOF
