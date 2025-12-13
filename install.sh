@@ -81,6 +81,13 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # --- ENABLE NETWORK MANAGER ---
 systemctl enable NetworkManager
 
+# --- INSTALL YAY
+git clone https://aur.archlinux.org/yay
+cd yay
+makepkg -si --noconfirm
+cd ..
+rm -rf yay
+
 
 
 ### --- COPY NIRI CONFIG TO USER HOME (after chroot) ---
@@ -90,9 +97,6 @@ git clone https://github.com/raihandotim/niri /tmp/niri_repo
 cp -r /tmp/niri_repo/* /home/$USERNAME/
 chown -R $USERNAME:$USERNAME /home/$USERNAME/
 rm -rf /tmp/niri_repo
-git clone https://aur.archlinux.org/yay
-cd yay
-makepkg -si
 EOF
 umount -R /mnt
 
